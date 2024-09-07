@@ -32,7 +32,7 @@ namespace server.Core.UseCases.Customer.CreateCustomerUseCase
                     createCustomerRequestDTO.Nome,
                     createCustomerRequestDTO.Email,
                     createCustomerRequestDTO.Telefone,
-                    createCustomerRequestDTO.Endereço
+                    createCustomerRequestDTO.Endereco
                 );
 
                 await _customerRepository.CreateAsync(customer);

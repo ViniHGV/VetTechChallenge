@@ -9,14 +9,14 @@ namespace server.Core.Models
             this.Nome = Nome;
             this.Email = Email;
             this.Telefone = Telefone;
-            this.Endereço = Endereço;
+            this.Endereco = Endereco;
         }
 
         public int Id { get; set; }
         public string Nome { get; set; }
         public string Email { get; set; }
         public string? Telefone { get; set; }
-        public string? Endereço { get; set; }
+        public string? Endereco { get; set; }
         public DateTime CriadoEm { get; set; } = DateTime.Now;
     }
 }

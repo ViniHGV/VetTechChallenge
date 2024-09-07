@@ -10,6 +10,6 @@ namespace server.Application.Dtos.CustomerDto
         [EmailAddress(ErrorMessage = "O e-amail informado é inválido")]
             string Email,
         [DataType(DataType.PhoneNumber)] [Display(Name = "999994444")] string? Telefone,
-        string? Endereço
+        string? Endereco
     ) { }
 }

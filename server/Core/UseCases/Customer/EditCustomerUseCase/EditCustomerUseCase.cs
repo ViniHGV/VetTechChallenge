@@ -27,7 +27,7 @@ namespace server.Core.UseCases.Customer.EditCustomerUseCase
 
             customerById.Nome = editCustomerRequestDTO.Nome;
             customerById.Email = editCustomerRequestDTO.Email.ToLower();
-            customerById.Endereço = editCustomerRequestDTO.Endereço;
+            customerById.Endereco = editCustomerRequestDTO.Endereco;
             customerById.Telefone = editCustomerRequestDTO.Telefone;
 
             await this._customerRepository.Update(customerById);
