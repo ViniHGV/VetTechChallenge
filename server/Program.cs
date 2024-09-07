@@ -14,7 +14,15 @@ builder.Services.AddUseCaseServices();
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("corsPolicy", builder => builder.AllowAnyOrigin().AllowAnyMethod());
+    options.AddPolicy(
+        "corsPolicy",
+        builder =>
+            builder
+                .WithOrigins("http://localhost:5173")
+                .SetIsOriginAllowedToAllowWildcardSubdomains()
+                .WithMethods("GET", "PUT", "POST", "DELETE")
+                .AllowAnyHeader()
+    );
 });
 
 var app = builder.Build();
