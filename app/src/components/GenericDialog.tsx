@@ -7,12 +7,13 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { ReactElement } from "react";
+import { ReactElement, ReactNode } from "react";
 
 interface IGenericDialog {
   buttonOpenDiolog: ReactElement;
   title: string;
   description: string;
+  children?: ReactNode;
   ButtonsFooter: ReactElement;
 }
 
@@ -20,6 +21,7 @@ export function GenericDialog({
   buttonOpenDiolog,
   title,
   description,
+  children,
   ButtonsFooter,
 }: IGenericDialog) {
   return (
@@ -29,6 +31,7 @@ export function GenericDialog({
         <AlertDialogHeader>
           <AlertDialogTitle>{title}</AlertDialogTitle>
           <AlertDialogDescription>{description}</AlertDialogDescription>
+          {children}
         </AlertDialogHeader>
         <AlertDialogFooter>{ButtonsFooter}</AlertDialogFooter>
       </AlertDialogContent>
