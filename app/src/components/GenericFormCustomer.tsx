@@ -10,9 +10,15 @@ import { useNavigate } from "react-router";
 import { FormField } from "./FormField";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
+import { EditCustomerService } from "@/services/Customer/EditCustomer.Service";
+import { toast } from "react-toastify";
+import { CreateCustomerService } from "@/services/Customer/CreateCustomer.Service";
+import { CreateCustomerRequestDTO } from "@/interfaces/Dtos/Customer/CreateCustomerRequestDTO";
+import { useEffect } from "react";
+import { CustomerResponseDTO } from "@/interfaces/Dtos/Customer/CustomerResponseDTO";
 
 interface IGenericFormCustomer {
-  customerData?: IFormRegisterCustomer;
+  customerData?: CustomerResponseDTO;
 }
 
 export const GenericFormCustomer = ({ customerData }: IGenericFormCustomer) => {
@@ -25,21 +31,60 @@ export const GenericFormCustomer = ({ customerData }: IGenericFormCustomer) => {
     resolver: zodResolver(FormRegisterCustomerSchema),
   });
 
+  useEffect(() => {
+    if (customerData) {
+      setValue("nome", customerData.nome);
+      setValue("email", customerData.email);
+      setValue("endereco", customerData.endereco);
+      setValue("telefone", customerData.telefone);
+    }
+  }, [customerData]);
+
   const navigate = useNavigate();
 
   const navigateToHome = () => navigate("/");
 
-  const onSubmit = (values: IFormRegisterCustomer) => {
-    console.log(values);
+  const successService = (successMessage: string) => {
+    toast.success(successMessage);
+    navigate("/");
+  };
+
+  const onSubmit = async (values: IFormRegisterCustomer) => {
+    const { email, endereco, nome, telefone } = values;
+    const dataRequest: CreateCustomerRequestDTO = {
+      email,
+      endereco,
+      nome,
+      telefone,
+    };
+
+    if (customerData)
+      return await EditCustomerService(customerData.id, dataRequest)
+        .then(() => {
+          successService("Cliente editado com sucesso!");
+        })
+        .catch((err) => {
+          toast.error(err.response?.data.message);
+        });
+
+    return await CreateCustomerService(dataRequest)
+      .then(() => {
+        successService("Cliente cadastrado com sucesso");
+      })
+      .catch((err) => {
+        toast.error(err.response?.data.message);
+      });
   };
 
   const handleChangePhone = (phoneValue: string) => {
     setValue("telefone", PhoneMask(phoneValue));
   };
+
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="w-full space-y-6">
       <div className="flex flex-col w-full space-y-2">
         <FormField
+          defaultValue={customerData?.nome}
           type="text"
           placeholder="name example"
           name="nome"
@@ -48,6 +93,7 @@ export const GenericFormCustomer = ({ customerData }: IGenericFormCustomer) => {
           textLabel="Nome"
         />
         <FormField
+          defaultValue={customerData?.email}
           type="email"
           placeholder="email@example.com"
           name="email"
@@ -60,6 +106,7 @@ export const GenericFormCustomer = ({ customerData }: IGenericFormCustomer) => {
             Telefone
           </Label>
           <Input
+            defaultValue={customerData?.telefone}
             placeholder="(99) 99999-9999"
             {...register("telefone")}
             maxLength={15}
@@ -73,6 +120,7 @@ export const GenericFormCustomer = ({ customerData }: IGenericFormCustomer) => {
           )}
         </div>
         <FormField
+          defaultValue={customerData?.endereco}
           type="text"
           placeholder="Rua example nº99"
           name="endereco"
