@@ -15,6 +15,7 @@ import { useNavigate } from "react-router";
 import { ImSpinner8 } from "react-icons/im";
 import { DialogDetailsCustomer } from "./DialogDetailsCustomer";
 import { DialogDeleteCustomer } from "./DialogDeleteCustomer";
+import { PhoneMask } from "@/utils/Masks/PhoneMask";
 
 export function TableListCustomers() {
   const navigate = useNavigate();
@@ -30,14 +31,14 @@ export function TableListCustomers() {
 
   if (isLoading)
     return (
-      <div className="w-screen h-screen flex items-center justify-center">
-        <ImSpinner8 className="animate-spin text-2xl" />
+      <div className="flex w-full justify-center">
+        <ImSpinner8 className="animate-spin text-4xl" />
       </div>
     );
 
   return (
     <Table>
-      <TableCaption>Listagem de usuários cadastrados no sistema.</TableCaption>
+      <TableCaption>Listagem de clientes cadastrados no sistema.</TableCaption>
       <TableHeader>
         <TableRow>
           <TableHead>Nome</TableHead>
@@ -55,7 +56,7 @@ export function TableListCustomers() {
                 {customer.nome}
               </TableCell>
               <TableCell>{customer.email}</TableCell>
-              <TableCell>{customer.telefone}</TableCell>
+              <TableCell>{PhoneMask(customer.telefone)}</TableCell>
               <TableCell>{customer.endereco}</TableCell>
               <TableCell className="text-right">
                 <div className="space-x-2">
@@ -76,7 +77,11 @@ export function TableListCustomers() {
             </TableRow>
           ))
         ) : (
-          <TableRow>Sem clientes cadastrados</TableRow>
+          <TableRow>
+            <TableCell colSpan={5} className="py-4 font-semibold">
+              Sem clientes cadastrados até o momento!
+            </TableCell>
+          </TableRow>
         )}
       </TableBody>
     </Table>
