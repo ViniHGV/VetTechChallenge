@@ -1,6 +1,9 @@
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using server.Application.Configurations;
 using server.Application.Dtos;
 using server.Application.Dtos.CustomerDto;
+using server.Core.Models;
 using server.Core.UseCases.Customer.CreateCustomerUseCase;
 using server.Core.UseCases.Customer.DeleteCustomerUseCase;
 using server.Core.UseCases.Customer.EditCustomerUseCase;
@@ -18,13 +21,15 @@ namespace server.Application.Controllers
         private readonly IGetUniqueCustomerUseCase _getUniqueCustomerUseCase;
         private readonly IEditCustomerUseCase _editCustomerUseCase;
         private readonly IDeleteCustomerUseCase _deleteCustomerUseCase;
+        private readonly ILogger _logger;
 
         public CustomerController(
             IListAllCustomersUseCase listAllCustomersUseCase,
             ICreateCustomerUseCase createCustomerUseCase,
             IGetUniqueCustomerUseCase getUniqueCustomerUseCase,
             IEditCustomerUseCase editCustomerUseCase,
-            IDeleteCustomerUseCase deleteCustomerUseCase
+            IDeleteCustomerUseCase deleteCustomerUseCase,
+            ILogger<Customer> logger
         )
         {
             this._listAllCustomersUseCase = listAllCustomersUseCase;
@@ -32,14 +37,21 @@ namespace server.Application.Controllers
             this._getUniqueCustomerUseCase = getUniqueCustomerUseCase;
             this._editCustomerUseCase = editCustomerUseCase;
             this._deleteCustomerUseCase = deleteCustomerUseCase;
+            this._logger = logger;
         }
 
         [HttpGet]
-        public async Task<IActionResult> getAllCustomers()
+        public async Task<ActionResult<List<Customer>>> getAllCustomers()
         {
             try
             {
-                return Ok(await this._listAllCustomersUseCase.execute());
+                var customersList = await this._listAllCustomersUseCase.execute();
+                _logger.LogInformation(
+                    MyLogEvents.ListCustomers,
+                    "GET() Get all customer success",
+                    DateTime.UtcNow.ToLongTimeString()
+                );
+                return Ok(customersList);
             }
             catch (Exception e)
             {
@@ -48,20 +60,30 @@ namespace server.Application.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> getAllCustomers([FromRoute] int id)
+        public async Task<ActionResult<Customer>> getAllCustomers([FromRoute] int id)
         {
             try
             {
-                return Ok(await this._getUniqueCustomerUseCase.execute(id));
+                var customer = await this._getUniqueCustomerUseCase.execute(id);
+                _logger.LogInformation(
+                    MyLogEvents.GetCustomer,
+                    $"Get({id}) Customer found with success"
+                );
+                return Ok(customer);
             }
             catch (Exception e)
             {
+                _logger.LogWarning(
+                    MyLogEvents.GetCustomerNotFound,
+                    "Get({Id}) Customer NOT FOUND",
+                    id
+                );
                 return NotFound(new ExceptionResponseDTO(e.Message));
             }
         }
 
         [HttpPost]
-        public async Task<IActionResult> createCustomer(
+        public async Task<ActionResult<CreateCustomerResponseDTO>> createCustomer(
             [FromBody] CreateCustomerRequestDTO createCustomerRequestDTO
         )
         {
@@ -70,46 +92,76 @@ namespace server.Application.Controllers
                 var customerCreated = await this._createCustomerUseCase.execute(
                     createCustomerRequestDTO
                 );
-                return Ok(customerCreated);
+
+                string uri = $"http://localhost:5104/api/cliente/{customerCreated.customer.Id}";
+
+                _logger.LogInformation(
+                    MyLogEvents.GenerateCustomer,
+                    "POST Customer created with success",
+                    uri
+                );
+                return Created(uri, customerCreated);
             }
             catch (Exception e)
             {
+                _logger.LogWarning(
+                    MyLogEvents.GenerateCustomerError,
+                    "POST Creation customer error"
+                );
                 return NotFound(new ExceptionResponseDTO(e.Message));
             }
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> createCustomer(
+        public async Task<ActionResult<EditCustomerResponseDTO>> editCustomer(
             [FromBody] EditCustomerRequestDTO editCustomerRequestDTO,
             [FromRoute] int id
         )
         {
             try
             {
-                var customerCreated = await this._editCustomerUseCase.execute(
+                var customerEdited = await this._editCustomerUseCase.execute(
                     editCustomerRequestDTO,
                     id
                 );
+                _logger.LogInformation(
+                    MyLogEvents.UpdateCustomer,
+                    $"PUT({id}) Customer Eddited with success"
+                );
 
-                return Ok(customerCreated);
+                return Ok(customerEdited);
             }
             catch (Exception e)
             {
+                _logger.LogWarning(
+                    MyLogEvents.UpdateCustomerNotFound,
+                    $"PUT({id}) NOT FOUND customer"
+                );
                 return NotFound(new ExceptionResponseDTO(e.Message));
             }
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> deleteCustomer([FromRoute] int id)
+        public async Task<ActionResult<DeleteCustomerResponseDTO>> deleteCustomer(
+            [FromRoute] int id
+        )
         {
             try
             {
-                var customerDelete = await this._deleteCustomerUseCase.execute(id);
+                var customerDeleted = await this._deleteCustomerUseCase.execute(id);
+                _logger.LogInformation(
+                    MyLogEvents.DeleteCustomer,
+                    $"DELETE({id}) Customer deleted with success"
+                );
 
-                return Ok(customerDelete);
+                return Ok(customerDeleted);
             }
             catch (Exception e)
             {
+                _logger.LogWarning(
+                    MyLogEvents.GetCustomerNotFound,
+                    $"DELETE({id}) Customer deleted Error NOT FOUND"
+                );
                 return NotFound(new ExceptionResponseDTO(e.Message));
             }
         }
