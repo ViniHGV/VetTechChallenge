@@ -1,8 +1,8 @@
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using server.Application.Configurations;
 using server.Application.Dtos;
 using server.Application.Dtos.CustomerDto;
+using server.Core.Exceptions;
 using server.Core.Models;
 using server.Core.UseCases.Customer.CreateCustomerUseCase;
 using server.Core.UseCases.Customer.DeleteCustomerUseCase;
@@ -53,9 +53,9 @@ namespace server.Application.Controllers
                 );
                 return Ok(customersList);
             }
-            catch (Exception e)
+            catch (ApiException e)
             {
-                return NotFound(new ExceptionResponseDTO(e.Message));
+                return StatusCode(e.StatusCode, new ExceptionResponseDTO(e.Message, e.StatusCode));
             }
         }
 
@@ -71,14 +71,14 @@ namespace server.Application.Controllers
                 );
                 return Ok(customer);
             }
-            catch (Exception e)
+            catch (ApiException e)
             {
                 _logger.LogWarning(
                     MyLogEvents.GetCustomerNotFound,
                     "Get({Id}) Customer NOT FOUND",
                     id
                 );
-                return NotFound(new ExceptionResponseDTO(e.Message));
+                return StatusCode(e.StatusCode, new ExceptionResponseDTO(e.Message, e.StatusCode));
             }
         }
 
@@ -102,13 +102,13 @@ namespace server.Application.Controllers
                 );
                 return Created(uri, customerCreated);
             }
-            catch (Exception e)
+            catch (ApiException e)
             {
                 _logger.LogWarning(
                     MyLogEvents.GenerateCustomerError,
                     "POST Creation customer error"
                 );
-                return NotFound(new ExceptionResponseDTO(e.Message));
+                return StatusCode(e.StatusCode, new ExceptionResponseDTO(e.Message, e.StatusCode));
             }
         }
 
@@ -131,13 +131,13 @@ namespace server.Application.Controllers
 
                 return Ok(customerEdited);
             }
-            catch (Exception e)
+            catch (ApiException e)
             {
                 _logger.LogWarning(
                     MyLogEvents.UpdateCustomerNotFound,
                     $"PUT({id}) NOT FOUND customer"
                 );
-                return NotFound(new ExceptionResponseDTO(e.Message));
+                return StatusCode(e.StatusCode, new ExceptionResponseDTO(e.Message, e.StatusCode));
             }
         }
 
@@ -156,13 +156,13 @@ namespace server.Application.Controllers
 
                 return Ok(customerDeleted);
             }
-            catch (Exception e)
+            catch (ApiException e)
             {
                 _logger.LogWarning(
                     MyLogEvents.GetCustomerNotFound,
                     $"DELETE({id}) Customer deleted Error NOT FOUND"
                 );
-                return NotFound(new ExceptionResponseDTO(e.Message));
+                return StatusCode(e.StatusCode, new ExceptionResponseDTO(e.Message, e.StatusCode));
             }
         }
     }
