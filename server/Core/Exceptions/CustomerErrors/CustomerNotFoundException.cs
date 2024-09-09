@@ -1,4 +1,4 @@
-namespace server.Core.Errors.CustomerErrors
+namespace server.Core.Exceptions.CustomerErrors
 {
     public class CustomerNotFoundException : Exception
     {

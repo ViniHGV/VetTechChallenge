@@ -1,5 +1,5 @@
 using server.Application.Dtos.CustomerDto;
-using server.Core.Errors.CustomerErrors;
+using server.Core.Exceptions.CustomerErrors;
 using server.Infrastructure.Repositories.GenericRepository;
 
 namespace server.Core.UseCases.Customer.CreateCustomerUseCase
