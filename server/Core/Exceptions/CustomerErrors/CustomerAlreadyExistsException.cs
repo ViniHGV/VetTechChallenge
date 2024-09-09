@@ -1,8 +1,8 @@
 namespace server.Core.Exceptions.CustomerErrors
 {
-    public class CustomerAlreadyExistsException : Exception
+    public class CustomerAlreadyExistsException : ApiException
     {
-        public CustomerAlreadyExistsException() { }
+        public override int StatusCode => 409;
 
         public CustomerAlreadyExistsException(string message)
             : base(message) { }
