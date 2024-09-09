@@ -16,6 +16,8 @@ import { CreateCustomerService } from "@/services/Customer/CreateCustomer.Servic
 import { CreateCustomerRequestDTO } from "@/interfaces/Dtos/Customer/CreateCustomerRequestDTO";
 import { useEffect } from "react";
 import { CustomerResponseDTO } from "@/interfaces/Dtos/Customer/CustomerResponseDTO";
+import { RemoveSpecialCaracteres } from "@/utils/RemoveSpecialCaracteres";
+import { AxiosResponse } from "axios";
 
 interface IGenericFormCustomer {
   customerData?: CustomerResponseDTO;
@@ -55,21 +57,21 @@ export const GenericFormCustomer = ({ customerData }: IGenericFormCustomer) => {
       email,
       endereco,
       nome,
-      telefone,
+      telefone: RemoveSpecialCaracteres(telefone),
     };
 
     if (customerData)
       return await EditCustomerService(customerData.id, dataRequest)
-        .then(() => {
-          successService("Cliente editado com sucesso!");
+        .then((res: AxiosResponse) => {
+          successService(res.data.message);
         })
         .catch((err) => {
           toast.error(err.response?.data.message);
         });
 
     return await CreateCustomerService(dataRequest)
-      .then(() => {
-        successService("Cliente cadastrado com sucesso");
+      .then((res: AxiosResponse) => {
+        successService(res.data.message);
       })
       .catch((err) => {
         toast.error(err.response?.data.message);
