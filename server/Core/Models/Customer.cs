@@ -4,7 +4,7 @@ namespace server.Core.Models
     {
         public Customer() { }
 
-        public Customer(string Nome, string Email, string Telefone, string Endereço)
+        public Customer(string Nome, string Email, string Telefone, string Endereco)
         {
             this.Nome = Nome;
             this.Email = Email;
