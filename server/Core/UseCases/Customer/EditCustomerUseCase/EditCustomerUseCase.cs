@@ -30,9 +30,15 @@ namespace server.Core.UseCases.Customer.EditCustomerUseCase
             customerById.Endereco = editCustomerRequestDTO.Endereco;
             customerById.Telefone = editCustomerRequestDTO.Telefone;
 
-            await this._customerRepository.Update(customerById);
-
-            return new EditCustomerResponseDTO("Usuário editado com sucesso!", customerById);
+            try
+            {
+                await this._customerRepository.Update(customerById);
+                return new EditCustomerResponseDTO("Usuário editado com sucesso!", customerById);
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
         }
     }
 }

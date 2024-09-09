@@ -14,21 +14,14 @@ namespace server.Core.UseCases.Customer.GetUniqueCustomerUseCase
 
         public async Task<Models.Customer> execute(int customerId)
         {
-            try
-            {
-                var customerById = await _customerRepository.GetAsync(customer =>
-                    customer.Id == customerId
-                );
+            var customerById = await _customerRepository.GetAsync(customer =>
+                customer.Id == customerId
+            );
 
-                if (customerById == null)
-                    throw new CustomerNotFoundException("Cliente não encontrado!");
+            if (customerById == null)
+                throw new CustomerNotFoundException("Cliente não encontrado!");
 
-                return customerById;
-            }
-            catch (Exception e)
-            {
-                throw new Exception(e.Message);
-            }
+            return customerById;
         }
     }
 }

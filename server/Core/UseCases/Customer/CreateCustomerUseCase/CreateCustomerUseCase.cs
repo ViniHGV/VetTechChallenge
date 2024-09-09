@@ -17,26 +17,25 @@ namespace server.Core.UseCases.Customer.CreateCustomerUseCase
             CreateCustomerRequestDTO createCustomerRequestDTO
         )
         {
+            var findCustomerByName = await this._customerRepository.GetAsync(customer =>
+                customer.Email.ToLower().Equals(createCustomerRequestDTO.Email.ToLower())
+            );
+
+            if (findCustomerByName != null)
+                throw new CustomerAlreadyExistsException(
+                    $"Já existe um cliente cadastrado com o e-mail {createCustomerRequestDTO.Email}"
+                );
+
+            var customer = new Models.Customer(
+                createCustomerRequestDTO.Nome,
+                createCustomerRequestDTO.Email,
+                createCustomerRequestDTO.Telefone,
+                createCustomerRequestDTO.Endereco
+            );
+
             try
             {
-                var findCustomerByName = await this._customerRepository.GetAsync(customer =>
-                    customer.Email.ToLower().Equals(createCustomerRequestDTO.Email.ToLower())
-                );
-
-                if (findCustomerByName != null)
-                    throw new CustomerAlreadyExistsException(
-                        $"Já existe um cliente cadastrado com o e-mail {createCustomerRequestDTO.Email}"
-                    );
-
-                var customer = new Models.Customer(
-                    createCustomerRequestDTO.Nome,
-                    createCustomerRequestDTO.Email,
-                    createCustomerRequestDTO.Telefone,
-                    createCustomerRequestDTO.Endereco
-                );
-
                 await _customerRepository.CreateAsync(customer);
-
                 return new CreateCustomerResponseDTO("Cliente cadastrado com sucesso!", customer);
             }
             catch (Exception e)

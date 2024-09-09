@@ -20,12 +20,10 @@ namespace server.Core.UseCases.Customer.DeleteCustomerUseCase
 
         public async Task<DeleteCustomerResponseDTO> execute(int customerId)
         {
+            var customerById = await _getUniqueCustomerUseCase.execute(customerId);
             try
             {
-                var customerById = await _getUniqueCustomerUseCase.execute(customerId);
-
                 await this._customerRepository.RemoveAsync(customerById);
-
                 return new DeleteCustomerResponseDTO("Cliente deletado com sucesso!");
             }
             catch (Exception e)
