@@ -15,7 +15,11 @@ namespace server.Infrastructure.Persistence
                 .GetSection("DefaultConnection")
                 .Value;
 
+            // Utilizando SQLite
             options.UseSqlite("Data Source=Customers.db");
+
+            // Utilizando SQLServer
+            // options.UseSqlServer(connectionString);
         }
     }
 }

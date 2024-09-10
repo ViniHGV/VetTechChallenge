@@ -17,11 +17,11 @@ namespace server.Core.UseCases.Customer.CreateCustomerUseCase
             CreateCustomerRequestDTO createCustomerRequestDTO
         )
         {
-            var findCustomerByName = await this._customerRepository.GetAsync(customer =>
+            var findCustomerByEmail = await this._customerRepository.GetAsync(customer =>
                 customer.Email.ToLower().Equals(createCustomerRequestDTO.Email.ToLower())
             );
 
-            if (findCustomerByName != null)
+            if (findCustomerByEmail != null)
                 throw new CustomerAlreadyExistsException(
                     $"Já existe um cliente cadastrado com o e-mail {createCustomerRequestDTO.Email}"
                 );
