@@ -1,50 +1,47 @@
-# React + TypeScript + Vite
+## Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+### Visão Geral
 
-Currently, two official plugins are available:
+Aplicação web em React para gerenciar clientes, incluindo funcionalidades de listagem, criação, edição e exclusão. Utiliza TypeScript, Vite, e várias bibliotecas para gestão de estado e formulários.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### Tecnologias Utilizadas
 
-## Expanding the ESLint configuration
+-   **React:** Biblioteca para construção de interfaces de usuário.
+-   **TypeScript:** Superset do JavaScript para tipagem estática.
+-   **Vite:** Ferramenta de construção rápida.
+-   **React Router DOM:** Gerenciamento de rotas.
+-   **Axios:** Cliente HTTP para requisições à API.
+-   **React Query:** Gerenciamento de estado e caching de dados.
+-   **React Hook Form:** Manipulação de formulários.
+-   **React Toastify:** Exibição de notificações.
+-   **Shadcn/UI:** Componentes de interface de usuário.
+-   **Tailwind CSS:** Framework CSS utilitário para estilização.
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+### Páginas
 
-- Configure the top-level `parserOptions` property like this:
+-   **Lista de Clientes:** `Rota: /`
+![image](https://github.com/user-attachments/assets/8d34dab6-4ef3-4795-b479-28d0fc90b133)
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+-   **Detalhes do Cliente:** `Rota: /`
+![image](https://github.com/user-attachments/assets/63b46dd0-5427-45c7-b18e-b48bd6813895)
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+-   **Deleção do Cliente:** `Rota: /`
+![image](https://github.com/user-attachments/assets/43300f87-88dc-4144-bc50-72b738e445df)
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+-   **Cadastro de Clientes:** `Rota: /customer/create`
+![image](https://github.com/user-attachments/assets/c715f799-ecbf-40d7-8fec-5b8292311582)
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+-   **Edição de Clientes:** `Rota: /customer/edit/${id}`
+![image](https://github.com/user-attachments/assets/c703d740-08c1-4426-a519-68228844ca2f)
+
+
+
+### Estrutura do Projeto
+
+-   **interfaces/Dtos:** DTOs para comunicação com a API.
+-   **services:** Serviços para chamadas HTTP.
+-   **pages:** Páginas da aplicação.
+-   **components:** Componentes reutilizáveis.
+-   **schemas:** Validação de formulários.
+-   **utils:** Funções utilitárias e máscaras.
+-   **lib/Api:** Configuração do Axios.
