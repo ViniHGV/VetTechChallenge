@@ -37,10 +37,12 @@ export const DialogDetailsCustomer = ({ customer }: IDialogDetailsCustomer) => {
           <strong>E-mail:</strong> {customer.email}.
         </p>
         <p className="py-1">
-          <strong>Telefone:</strong> {PhoneMask(customer.telefone)}.
+          <strong>Telefone:</strong>
+          {customer.telefone ? PhoneMask(customer.telefone) : "Sem telefone"}.
         </p>
         <p className="py-1">
-          <strong>Endereço:</strong> {customer.endereco}.
+          <strong>Endereço:</strong>{" "}
+          {customer.endereco ? customer.endereco : "Sem endereço"}.
         </p>
         <p className="py-1">
           <strong>Data de criação: </strong>

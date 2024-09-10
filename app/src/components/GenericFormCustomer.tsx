@@ -17,7 +17,6 @@ import { CreateCustomerRequestDTO } from "@/interfaces/Dtos/Customer/CreateCusto
 import { useEffect } from "react";
 import { CustomerResponseDTO } from "@/interfaces/Dtos/Customer/CustomerResponseDTO";
 import { RemoveSpecialCaracteres } from "@/utils/RemoveSpecialCaracteres";
-import { AxiosResponse } from "axios";
 
 interface IGenericFormCustomer {
   customerData?: CustomerResponseDTO;
@@ -38,7 +37,10 @@ export const GenericFormCustomer = ({ customerData }: IGenericFormCustomer) => {
       setValue("nome", customerData.nome);
       setValue("email", customerData.email);
       setValue("endereco", customerData.endereco);
-      setValue("telefone", customerData.telefone);
+      setValue(
+        "telefone",
+        customerData.telefone && PhoneMask(customerData.telefone)
+      );
     }
   }, [customerData]);
 
@@ -62,7 +64,7 @@ export const GenericFormCustomer = ({ customerData }: IGenericFormCustomer) => {
 
     if (customerData)
       return await EditCustomerService(customerData.id, dataRequest)
-        .then((res: AxiosResponse) => {
+        .then((res: any) => {
           successService(res.data.message);
         })
         .catch((err) => {
@@ -70,7 +72,7 @@ export const GenericFormCustomer = ({ customerData }: IGenericFormCustomer) => {
         });
 
     return await CreateCustomerService(dataRequest)
-      .then((res: AxiosResponse) => {
+      .then((res: any) => {
         successService(res.data.message);
       })
       .catch((err) => {

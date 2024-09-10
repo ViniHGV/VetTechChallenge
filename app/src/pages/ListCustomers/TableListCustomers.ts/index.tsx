@@ -56,8 +56,13 @@ export function TableListCustomers() {
                 {customer.nome}
               </TableCell>
               <TableCell>{customer.email}</TableCell>
-              <TableCell>{PhoneMask(customer.telefone)}</TableCell>
-              <TableCell>{customer.endereco}</TableCell>
+              <TableCell>
+                {(customer.telefone && PhoneMask(customer.telefone)) ||
+                  "Não informado"}
+              </TableCell>
+              <TableCell>
+                {(customer.endereco && customer.endereco) || "Não informado"}
+              </TableCell>
               <TableCell className="text-right">
                 <div className="space-x-2">
                   <DialogDetailsCustomer customer={customer} />
