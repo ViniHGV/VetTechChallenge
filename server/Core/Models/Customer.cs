@@ -15,8 +15,8 @@ namespace server.Core.Models
         public int Id { get; set; }
         public string Nome { get; set; }
         public string Email { get; set; }
-        public string? Telefone { get; set; }
-        public string? Endereco { get; set; }
+        public string? Telefone { get; set; } = string.Empty;
+        public string? Endereco { get; set; } = string.Empty;
         public DateTime CriadoEm { get; set; } = DateTime.Now;
     }
 }
