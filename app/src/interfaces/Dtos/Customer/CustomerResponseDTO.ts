@@ -4,5 +4,5 @@ export interface CustomerResponseDTO {
   email: string;
   telefone: string;
   endereco: string;
-  criadoEm: string;
+  criadoEm?: string;
 }

@@ -37,7 +37,7 @@ export const DialogDetailsCustomer = ({ customer }: IDialogDetailsCustomer) => {
           <strong>E-mail:</strong> {customer.email}.
         </p>
         <p className="py-1">
-          <strong>Telefone:</strong>
+          <strong>Telefone: </strong>
           {customer.telefone ? PhoneMask(customer.telefone) : "Sem telefone"}.
         </p>
         <p className="py-1">
@@ -46,7 +46,9 @@ export const DialogDetailsCustomer = ({ customer }: IDialogDetailsCustomer) => {
         </p>
         <p className="py-1">
           <strong>Data de criação: </strong>
-          {FormatDateBRL(customer.criadoEm).replace(",", " às")}.
+          {customer.criadoEm &&
+            FormatDateBRL(customer.criadoEm).replace(",", " às")}
+          .
         </p>
       </div>
     </GenericDialog>
